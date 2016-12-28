@@ -34,14 +34,23 @@ var y = 150;
 var dx = 2; //positive moves L to R, negative moves R to L
 var dy = 4; //positive move T to B, negative moves B to T
 
-requestAnimationFrame(function gameLoop() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
+function circle(x, y, radius) {
   context.beginPath();
-  context.arc(x, y, 10, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
-  // context.rect(150, 150, 10,10); //x,y, width, height
+  context.arc(x, y, radius, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
   context.closePath();
   context.fillStyle = "blue";
   context.fill();
+}
+
+function rectangle(x, y, width, height) {
+  context.beginPath();
+  context.fillRect(x, y, width, height); //x,y, width, height
+  context.closePath();
+}
+
+requestAnimationFrame(function gameLoop() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  circle(x, y, 10);
   x += dx; //increase speed left & right
   y += dy; //increase speed up and down
   requestAnimationFrame(gameLoop);
