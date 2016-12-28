@@ -28,9 +28,21 @@ var context = canvas.getContext('2d');
 //   }
 //   requestAnimationFrame(gameLoop);
 // });
-context.beginPath();
-context.arc(75,75, 10, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
-// context.rect(150, 150, 10,10); //x,y, width, height
-context.closePath();
-context.fillStyle = "blue";
-context.fill();
+
+var x = 150;
+var y = 150;
+var dx = 2; //positive moves L to R, negative moves R to L
+var dy = 4; //positive move T to B, negative moves B to T
+
+requestAnimationFrame(function gameLoop() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.beginPath();
+  context.arc(x, y, 10, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
+  // context.rect(150, 150, 10,10); //x,y, width, height
+  context.closePath();
+  context.fillStyle = "blue";
+  context.fill();
+  x += dx; //increase speed left & right
+  y += dy; //increase speed up and down
+  requestAnimationFrame(gameLoop);
+});
