@@ -43,11 +43,19 @@ function circle(x, y, radius) {
   context.fill();
 }
 
-function rectangle(x, y, width, height) {
-  context.beginPath();
-  context.fillRect(x, y, width, height); //x,y, width, height
-  context.closePath();
+// function rectangle(x, y, width, height) {
+//   context.beginPath();
+//   context.fillRect(x, y, width, height); //x,y, width, height
+//   context.closePath();
+// }
+
+function Rectangle(x, y, width, height) {
+  this.x = x;
+  this.y = y;
+  this.width = width;
+  this.height = height;
 }
+var paddle = new Rectangle(canvas.width/2, canvas.height - 15, 100, 10);
 
 requestAnimationFrame(function gameLoop() {
   context.clearRect(0, 0, canvas.width, canvas.height);
@@ -76,7 +84,10 @@ requestAnimationFrame(function gameLoop() {
 
   x += speedX; //increase speed left & right
   y += speedY; //increase speed up and down
-  rectangle(canvas.width/2, canvas.height - 15, 100, 10);
+
+  context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+  // rectangle(canvas.width/2, canvas.height - 15, 100, 10);
+
   circle(x, y, radius);
   requestAnimationFrame(gameLoop);
 });
