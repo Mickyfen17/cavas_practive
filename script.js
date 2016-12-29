@@ -65,9 +65,18 @@ requestAnimationFrame(function gameLoop() {
     speedY = Math.abs(speedY) + 1; //Math.abs turns negitive num into positive
     console.log("top", speedY);
   }
+
+  if(Math.abs(speedX) > 5) {
+    console.log("Max speed X");
+    speedX = 1;
+  } else if(Math.abs(speedY) > 5) {
+    console.log("Max speed Y");
+    speedY = 1;
+  }
+
   x += speedX; //increase speed left & right
   y += speedY; //increase speed up and down
-
+  rectangle(canvas.width/2, canvas.height - 15, 100, 10);
   circle(x, y, radius);
   requestAnimationFrame(gameLoop);
 });
