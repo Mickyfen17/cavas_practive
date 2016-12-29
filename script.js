@@ -31,6 +31,7 @@ var context = canvas.getContext('2d');
 
 var x = 150;
 var y = 150;
+var radius = 10;
 var dx = 2; //positive moves L to R, negative moves R to L
 var dy = 4; //positive move T to B, negative moves B to T
 
@@ -50,10 +51,10 @@ function rectangle(x, y, width, height) {
 
 requestAnimationFrame(function gameLoop() {
   context.clearRect(0, 0, canvas.width, canvas.height);
-  circle(x, y, 10);
-  if(x > canvas.width || x < 0) {
+  circle(x, y, radius);
+  if(x > canvas.width - radius || x < radius) {
     dx =- dx;
-  } else if (y > canvas.height || y < 0) {
+  } else if (y > canvas.height - radius || y < radius) {
     dy =- dy;
   }
   x += dx; //increase speed left & right
