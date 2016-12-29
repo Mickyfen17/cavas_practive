@@ -51,6 +51,11 @@ function rectangle(x, y, width, height) {
 requestAnimationFrame(function gameLoop() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   circle(x, y, 10);
+  if(x > canvas.width || x < 0) {
+    dx =- dx;
+  } else if (y > canvas.height || y < 0) {
+    dy =- dy;
+  }
   x += dx; //increase speed left & right
   y += dy; //increase speed up and down
   requestAnimationFrame(gameLoop);
