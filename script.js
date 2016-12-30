@@ -92,8 +92,8 @@ function ballTopBottomDetection() {
   if (y < radius) {                                       //if y pos of ball is less than 10(radius)top of canvas
     speedY =- speedY;                                     //bounce the ball
   } else if(y > canvas.height - (radius + paddle.height)) { //if y pos of ball is greater than canvas height - 20 (radius) + (paddle height)
-    paddleHitDetection();
-    // speedY =- speedY;
+    // paddleHitDetection();
+    speedY =- speedY;
   }
 }
 function paddleHitDetection () {
@@ -107,18 +107,15 @@ function paddleHitDetection () {
 
 var rowHeight = brickHeight + padding; //15px + 1px => 1px
 var colWidth = brickWidth + padding; //79px + 1px => 80px
-var row = Math.floor(y/rowHeight); //y axis for position of ball / 16(rowHeight)
-var col = Math.floor(x/colWidth);  //x axis for posistion of ball / 80(colWidth)
 
 function brickHitDetection() {
-  if(y < brickRows * rowHeight) { //brickRow = 3 * rowHeight = 16 => 48px
-    console.log(Math.floor(y/rowHeight), Math.floor(x/colWidth));
-    console.log(bricks[Math.floor(y/rowHeight)][Math.floor(x/colWidth)]);
-    speedY =- speedY;
-    // bricks[1][2] = 0;
-    bricks[Math.floor(y/rowHeight)][Math.floor(x/colWidth)] = 0;
-    console.log(bricks[Math.floor(y/rowHeight)][Math.floor(x/colWidth)]);
-
+  var row = Math.floor(y/rowHeight); //y axis for position of ball / 16(rowHeight) => 0-17
+  var column = Math.floor(x/colWidth);  //x axis for posistion of ball / 80(colWidth) => 0-4
+  if(y < brickRows * rowHeight && row >= 0 && //ball posistion less than 3(brickRow) * 16(rowHeight) => 48px && row >= 0
+     column >= 0 && bricks[row][column] === 1) { //column >= 0 && the value at Array brick[row][column] === 1
+    speedY =- speedY;                             //rebound the ball
+    // console.log(row, column);
+    bricks[row][column] = 0;                      //set brick value to 0 to vanish brick
   }
 }
 
