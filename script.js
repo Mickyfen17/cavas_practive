@@ -57,28 +57,57 @@ function Rectangle(x, y, width, height) {
 }
 var paddle = new Rectangle(canvas.width/2, canvas.height - 15, 100, 10);
 
+var body = document.querySelector("body");
+var leftKey = false;
+var rightKey = false;
+
+body.addEventListener("keydown", function(e) {
+  if(e.keyCode === 37) {
+    leftKey = true;
+  } else if(e.keyCode === 39) {
+    rightKey = true;
+  }
+});
+body.addEventListener("keyup", function(e) {
+  if(e.keyCode === 37) {
+    leftKey = false;
+  } else if(e.keyCode === 39) {
+    rightKey = false;
+  }
+});
+
+function paddleMovement() {
+  if(rightKey) {
+    paddle.x += 5;
+  } else if(leftKey) {
+    paddle.x -=5;
+  }
+}
+
 requestAnimationFrame(function gameLoop() {
   context.clearRect(0, 0, canvas.width, canvas.height);
+  paddleMovement();
+
   if(x > canvas.width - radius) {
     speedX = -(speedX +=1);
-    console.log("right", speedX);
+    // console.log("right", speedX);
   } else if (x < radius) {
     speedX = Math.abs(speedX) + 1; //Math.abs turns negitive num into positive
-    console.log("left", speedX);
+    // console.log("left", speedX);
   }
   if(y > canvas.height - radius) {
     speedY = -(speedY +=1);
-    console.log("bottom", speedY);
+    // console.log("bottom", speedY);
   } else if (y < radius) {
     speedY = Math.abs(speedY) + 1; //Math.abs turns negitive num into positive
-    console.log("top", speedY);
+    // console.log("top", speedY);
   }
 
   if(Math.abs(speedX) > 5) {
-    console.log("Max speed X");
+    // console.log("Max speed X");
     speedX = 1;
   } else if(Math.abs(speedY) > 5) {
-    console.log("Max speed Y");
+    // console.log("Max speed Y");
     speedY = 1;
   }
 
