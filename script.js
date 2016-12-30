@@ -35,7 +35,7 @@ var radius = 10;
 var speedX = 3; //positive moves L to R, negative moves R to L
 var speedY = 3; //positive move T to B, negative moves B to T
 
-function circle(x, y, radius) {
+function circle(x, y, radius, color) {
   context.beginPath();
   context.arc(x, y, radius, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
   context.closePath();
@@ -83,9 +83,40 @@ function paddleMovement() {
   }
 }
 
+var brickRows = 3;
+var brickColums = 5;
+var padding = 1;
+var brickWidth = (canvas.width/brickColums) - padding; //400(canvasWidth) / 5(brickColum) -1 => 79px
+var brickHeight = 15;
+var bricks = [];
+function createBricks() {
+  for(var i = 0; i < brickRows; i++) {
+    bricks.push([]);                   //creates empty row array and pushes into bricks
+    // console.log(bricks);
+    for(var j = 0; j < brickColums; j++) {
+      bricks[i].push(1);               //adds bricks to each row array creating a colum
+      // console.log(bricks);
+    }
+  }
+  drawBricks();
+}
+function drawBricks() {
+  for(var i = 0; i < brickRows; i++) {
+    for(var j = 0; j < brickColums; j++) {
+      if(bricks[i][j] === 1) {
+        context.fillRect((j * (brickWidth + padding)) + padding, (i * (brickHeight + padding)) + padding,
+                  brickWidth, brickHeight);
+      }
+    }
+  }
+}
+
 requestAnimationFrame(function gameLoop() {
 
   context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height); //create paddle
+  circle(x, y, radius);
+  createBricks();
   paddleMovement();
 
   if(x > canvas.width - radius || x < radius) {           //if x pos of ball is greater than canvas width - 10(radius) or less than 10(radius)
@@ -97,16 +128,13 @@ requestAnimationFrame(function gameLoop() {
     if(x > paddle.x && x < paddle.x + paddle.width) {     //and if ball lands between start and finish of paddle
       speedY =- speedY;                                   //bounce the ball
     } else if(y > canvas.height) {                        //if ball is goes above the canvas height
-      alert("Game Over");                                 //game over and reload the game
-      document.location.reload();    }
+      // alert("Game Over");                                 //game over and reload the game
+      // document.location.reload();
+    }
   }
-
 
   x += speedX; //increase speed left & right
   y += speedY; //increase speed up and down
-
-  context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height); //create paddle
-  circle(x, y, radius);
 
   requestAnimationFrame(gameLoop);
 });
