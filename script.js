@@ -51,6 +51,15 @@ function paddleMovement() {
   } else if(leftKey) {
     paddle.x -=5;
   }
+  paddleGlideArea();
+}
+//Function to limit paddle glide to within canvas
+function paddleGlideArea() {
+  if(paddle.x >= canvas.width - paddle.width) {
+    paddle.x = 300;
+  } else if (paddle.x <= 0) {
+    paddle.x = 0;
+  }
 }
 
 // CREATE BRICKS AND DISPLAY TO DOM
@@ -69,6 +78,9 @@ function createBricks() {
     }
   }
 }
+
+createBricks(); //create bricks
+
 function drawBricks() {
   for(var i = 0; i < brickRows; i++) {
     for(var j = 0; j < brickColumns; j++) {
@@ -118,8 +130,6 @@ function brickHitDetection() {
     bricks[row][column] = 0;                      //set brick value to 0 to vanish brick
   }
 }
-
-createBricks(); //create bricks
 
 // Main game animation
 requestAnimationFrame(function gameLoop() {
