@@ -88,11 +88,19 @@ requestAnimationFrame(function gameLoop() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   paddleMovement();
 
-  if(x > canvas.width || x < 0) {
-    speedX =- speedX;
-  } else if (y > canvas.height || y < 0) {
-    speedY =- speedY;
+  if(x > canvas.width - radius || x < radius) {           //if x pos of ball is greater than canvas width - 10(radius) or less than 10(radius)
+    speedX =- speedX;                                     //bounce the ball
   }
+  if (y < radius) {                                       //if y pos of ball is less than 10(radius)top of canvas
+    speedY =- speedY;                                     //bounce the ball
+  } else if(y > canvas.height - (radius + paddle.height)) { //if y pos of ball is greater than canvas height - 20 (radius) + (paddle height)
+    if(x > paddle.x && x < paddle.x + paddle.width) {     //and if ball lands between start and finish of paddle
+      speedY =- speedY;                                   //bounce the ball
+    } else if(y > canvas.height) {                        //if ball is goes above the canvas height
+      alert("Game Over");                                 //game over and reload the game
+      document.location.reload();    }
+  }
+
 
   x += speedX; //increase speed left & right
   y += speedY; //increase speed up and down
