@@ -32,8 +32,8 @@ var context = canvas.getContext('2d');
 var x = 150;
 var y = 150;
 var radius = 10;
-var speedX = 1; //positive moves L to R, negative moves R to L
-var speedY = 1; //positive move T to B, negative moves B to T
+var speedX = 3; //positive moves L to R, negative moves R to L
+var speedY = 3; //positive move T to B, negative moves B to T
 
 function circle(x, y, radius) {
   context.beginPath();
@@ -48,7 +48,6 @@ function circle(x, y, radius) {
 //   context.fillRect(x, y, width, height); //x,y, width, height
 //   context.closePath();
 // }
-
 function Rectangle(x, y, width, height) {
   this.x = x;
   this.y = y;
@@ -85,38 +84,46 @@ function paddleMovement() {
 }
 
 requestAnimationFrame(function gameLoop() {
+
   context.clearRect(0, 0, canvas.width, canvas.height);
   paddleMovement();
 
-  if(x > canvas.width - radius) {
-    speedX = -(speedX +=1);
-    // console.log("right", speedX);
-  } else if (x < radius) {
-    speedX = Math.abs(speedX) + 1; //Math.abs turns negitive num into positive
-    // console.log("left", speedX);
-  }
-  if(y > canvas.height - radius) {
-    speedY = -(speedY +=1);
-    // console.log("bottom", speedY);
-  } else if (y < radius) {
-    speedY = Math.abs(speedY) + 1; //Math.abs turns negitive num into positive
-    // console.log("top", speedY);
-  }
-
-  if(Math.abs(speedX) > 5) {
-    // console.log("Max speed X");
-    speedX = 1;
-  } else if(Math.abs(speedY) > 5) {
-    // console.log("Max speed Y");
-    speedY = 1;
+  if(x > canvas.width || x < 0) {
+    speedX =- speedX;
+  } else if (y > canvas.height || y < 0) {
+    speedY =- speedY;
   }
 
   x += speedX; //increase speed left & right
   y += speedY; //increase speed up and down
 
-  context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-  // rectangle(canvas.width/2, canvas.height - 15, 100, 10);
-
+  context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height); //create paddle
   circle(x, y, radius);
+
   requestAnimationFrame(gameLoop);
 });
+
+
+// //Increase speed on bounce
+// if(x > canvas.width - radius) {
+//   speedX = -(speedX +=1);
+//   // console.log("right", speedX);
+// } else if (x < radius) {
+//   speedX = Math.abs(speedX) + 1; //Math.abs turns negitive num into positive
+//   // console.log("left", speedX);
+// }
+// if(y > canvas.height - radius) {
+//   speedY = -(speedY +=1);
+//   // console.log("bottom", speedY);
+// } else if (y < radius) {
+//   speedY = Math.abs(speedY) + 1; //Math.abs turns negitive num into positive
+//   // console.log("top", speedY);
+// }
+// //Speed control
+// if(Math.abs(speedX) > 5) {
+//   // console.log("Max speed X");
+//   speedX = 1;
+// } else if(Math.abs(speedY) > 5) {
+//   // console.log("Max speed Y");
+//   speedY = 1;
+// }
