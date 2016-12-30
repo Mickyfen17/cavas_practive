@@ -55,16 +55,16 @@ function paddleMovement() {
 
 // CREATE BRICKS AND DISPLAY TO DOM
 var brickRows = 3;
-var brickColums = 5;
+var brickColumns = 5;
 var padding = 1;
-var brickWidth = (canvas.width/brickColums) - padding; //400(canvasWidth) / 5(brickColum) -1 => 79px
+var brickWidth = (canvas.width/brickColumns) - padding; //400(canvasWidth) / 5(brickColum) -1 => 79px
 var brickHeight = 15;
 var bricks = [];
 function createBricks() {
   for(var i = 0; i < brickRows; i++) {
     bricks.push([]);                   //creates empty row array and pushes into bricks
     // console.log(bricks);
-    for(var j = 0; j < brickColums; j++) {
+    for(var j = 0; j < brickColumns; j++) {
       bricks[i].push(1);               //adds bricks to each row array creating a colum
       // console.log(bricks);
     }
@@ -73,7 +73,7 @@ function createBricks() {
 }
 function drawBricks() {
   for(var i = 0; i < brickRows; i++) {
-    for(var j = 0; j < brickColums; j++) {
+    for(var j = 0; j < brickColumns; j++) {
       if(bricks[i][j] === 1) {
         var brick = new Rectangle((j * (brickWidth + padding)) + padding,
                                   (i * (brickHeight + padding)) + padding,
@@ -84,28 +84,37 @@ function drawBricks() {
   }
 }
 
+// COLLISION DETECTION FUNCTIONS
+function ballLeftRigthDetection() {
+  if(x > canvas.width - radius || x < radius) {           //if x pos of ball is greater than canvas width - 10(radius) or less than 10(radius)
+    speedX =- speedX;                                     //bounce the ball
+  }
+}
+function ballTopBottomDetection() {
+  if (y < radius) {                                       //if y pos of ball is less than 10(radius)top of canvas
+    speedY =- speedY;                                     //bounce the ball
+  } else if(y > canvas.height - (radius + paddle.height)) { //if y pos of ball is greater than canvas height - 20 (radius) + (paddle height)
+    paddleHitDetection();
+  }
+}
+function paddleHitDetection () {
+  if(x > paddle.x && x < paddle.x + paddle.width) {     //and if ball lands between start and finish of paddle
+    speedY =- speedY;                                   //bounce the ball
+  } else if(y > canvas.height) {                        //if ball is goes above the canvas height
+    alert("Game Over");                                 //game over and reload the game
+    document.location.reload();
+  }
+}
+
 // Main game animation
 requestAnimationFrame(function gameLoop() {
-
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.clearRect(0, 0, canvas.width, canvas.height); //clear ball after movement
   paddle.draw(); //create paddle
   circle(x, y, radius, "blue"); //create ball
   createBricks(); //create bricks
   paddleMovement();
-
-  if(x > canvas.width - radius || x < radius) {           //if x pos of ball is greater than canvas width - 10(radius) or less than 10(radius)
-    speedX =- speedX;                                     //bounce the ball
-  }
-  if (y < radius) {                                       //if y pos of ball is less than 10(radius)top of canvas
-    speedY =- speedY;                                     //bounce the ball
-  } else if(y > canvas.height - (radius + paddle.height)) { //if y pos of ball is greater than canvas height - 20 (radius) + (paddle height)
-    if(x > paddle.x && x < paddle.x + paddle.width) {     //and if ball lands between start and finish of paddle
-      speedY =- speedY;                                   //bounce the ball
-    } else if(y > canvas.height) {                        //if ball is goes above the canvas height
-      // alert("Game Over");                                 //game over and reload the game
-      // document.location.reload();
-    }
-  }
+  ballTopBottomDetection();
+  ballLeftRigthDetection();
 
   x += speedX; //increase speed left & right
   y += speedY; //increase speed up and down
