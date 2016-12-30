@@ -1,61 +1,32 @@
 var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
+var x = 150;     //start position of ball
+var y = 150;     //start position of ball
+var radius = 10; //radius of ball
+var speedX = 3;  //positive moves L to R, negative moves R to L
+var speedY = 3;  //positive move T to B, negative moves B to T
 
-// var counter = 0;
-//
-// var x = 50;
-// var y = 50;
-// var width = 30;
-// var height = 30;
-//
-// // function Block(x, y, width, height) {
-// //   this.x = x;
-// //   this.y = y;
-// //   this.width = width;
-// //   this.height = height;
-// // }
-// // var firstBlock = new Block(50, 50, 10, 10);
-// // var secondBlock = new Block(75, 75, 10, 10);
-//
-// // context.fillRect(50, 50, 10, 10); //x start pos, y start pos, width, height
-//
-// requestAnimationFrame(function gameLoop() {
-//   context.clearRect(0, 0, canvas.width, canvas.height);
-//   if(x <= (canvas.width - width)) {
-//     context.fillRect(x+=2, y, width, height);
-//   } else if(y <= (canvas.height - height)) {
-//     context.fillRect(x, y+=2, width, height);
-//   }
-//   requestAnimationFrame(gameLoop);
-// });
-
-var x = 150;
-var y = 150;
-var radius = 10;
-var speedX = 3; //positive moves L to R, negative moves R to L
-var speedY = 3; //positive move T to B, negative moves B to T
-
+//DRAW BALL FUNCTION
 function circle(x, y, radius, color) {
   context.beginPath();
   context.arc(x, y, radius, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
   context.closePath();
-  context.fillStyle = "blue";
+  context.fillStyle = color;
   context.fill();
 }
 
-// function rectangle(x, y, width, height) {
-//   context.beginPath();
-//   context.fillRect(x, y, width, height); //x,y, width, height
-//   context.closePath();
-// }
+//RECTANGLE CONSTRUCTOR FUNCTION
 function Rectangle(x, y, width, height) {
   this.x = x;
   this.y = y;
   this.width = width;
   this.height = height;
+  this.draw = function() {context.fillRect(this.x, this.y, this.width, this.height);};
 }
+
 var paddle = new Rectangle(canvas.width/2, canvas.height - 15, 100, 10);
 
+// EVENT LISTENERS TO MOVE PADDLE
 var body = document.querySelector("body");
 var leftKey = false;
 var rightKey = false;
@@ -74,7 +45,6 @@ body.addEventListener("keyup", function(e) {
     rightKey = false;
   }
 });
-
 function paddleMovement() {
   if(rightKey) {
     paddle.x += 5;
@@ -83,6 +53,7 @@ function paddleMovement() {
   }
 }
 
+// CREATE BRICKS AND DISPLAY TO DOM
 var brickRows = 3;
 var brickColums = 5;
 var padding = 1;
@@ -104,19 +75,22 @@ function drawBricks() {
   for(var i = 0; i < brickRows; i++) {
     for(var j = 0; j < brickColums; j++) {
       if(bricks[i][j] === 1) {
-        context.fillRect((j * (brickWidth + padding)) + padding, (i * (brickHeight + padding)) + padding,
-                  brickWidth, brickHeight);
+        var brick = new Rectangle((j * (brickWidth + padding)) + padding,
+                                  (i * (brickHeight + padding)) + padding,
+                                    brickWidth, brickHeight);
+        brick.draw();
       }
     }
   }
 }
 
+// Main game animation
 requestAnimationFrame(function gameLoop() {
 
   context.clearRect(0, 0, canvas.width, canvas.height);
-  context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height); //create paddle
-  circle(x, y, radius);
-  createBricks();
+  paddle.draw(); //create paddle
+  circle(x, y, radius, "blue"); //create ball
+  createBricks(); //create bricks
   paddleMovement();
 
   if(x > canvas.width - radius || x < radius) {           //if x pos of ball is greater than canvas width - 10(radius) or less than 10(radius)
