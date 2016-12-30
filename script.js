@@ -60,16 +60,14 @@ var padding = 1;
 var brickWidth = (canvas.width/brickColumns) - padding; //400(canvasWidth) / 5(brickColum) -1 => 79px
 var brickHeight = 15;
 var bricks = [];
+
 function createBricks() {
   for(var i = 0; i < brickRows; i++) {
-    bricks.push([]);                   //creates empty row array and pushes into bricks
-    // console.log(bricks);
+    bricks.push([]);                  //creates empty row array and pushes into bricks
     for(var j = 0; j < brickColumns; j++) {
-      bricks[i].push(1);               //adds bricks to each row array creating a column
-      // console.log(bricks);
+      bricks[i].push(1);              //adds bricks to each row array creating a column
     }
   }
-  drawBricks();
 }
 function drawBricks() {
   for(var i = 0; i < brickRows; i++) {
@@ -95,34 +93,43 @@ function ballTopBottomDetection() {
     speedY =- speedY;                                     //bounce the ball
   } else if(y > canvas.height - (radius + paddle.height)) { //if y pos of ball is greater than canvas height - 20 (radius) + (paddle height)
     paddleHitDetection();
+    // speedY =- speedY;
   }
 }
 function paddleHitDetection () {
   if(x > paddle.x && x < paddle.x + paddle.width) {     //and if ball lands between start and finish of paddle
     speedY =- speedY;                                   //bounce the ball
   } else if(y > canvas.height) {                        //if ball is goes above the canvas height
-    // alert("Game Over");                                 //game over and reload the game
-    // document.location.reload();
+    alert("Game Over");                                 //game over and reload the game
+    document.location.reload();
   }
 }
 
-var rowHeight = brickHeight + padding; //16px
-var colWidth = brickWidth + padding; //80px
-var row = Math.floor(y/rowHeight);
-var col = Math.floor(x/colWidth);
+var rowHeight = brickHeight + padding; //15px + 1px => 1px
+var colWidth = brickWidth + padding; //79px + 1px => 80px
+var row = Math.floor(y/rowHeight); //y axis for position of ball / 16(rowHeight)
+var col = Math.floor(x/colWidth);  //x axis for posistion of ball / 80(colWidth)
+
 function brickHitDetection() {
-  if(y < brickRows * rowHeight && col >= 0) { //ball is touching a brick
-    console.log(bricks[row][col]);
+  if(y < brickRows * rowHeight) { //brickRow = 3 * rowHeight = 16 => 48px
+    console.log(Math.floor(y/rowHeight), Math.floor(x/colWidth));
+    console.log(bricks[Math.floor(y/rowHeight)][Math.floor(x/colWidth)]);
     speedY =- speedY;
-    // bricks[row][col] = 0;
+    // bricks[1][2] = 0;
+    bricks[Math.floor(y/rowHeight)][Math.floor(x/colWidth)] = 0;
+    console.log(bricks[Math.floor(y/rowHeight)][Math.floor(x/colWidth)]);
+
   }
 }
+
+createBricks(); //create bricks
+
 // Main game animation
 requestAnimationFrame(function gameLoop() {
   context.clearRect(0, 0, canvas.width, canvas.height); //clear ball after movement
   paddle.draw(); //create paddle
   circle(x, y, radius, "blue"); //create ball
-  createBricks(); //create bricks
+  drawBricks();
   paddleMovement();
   ballTopBottomDetection();
   ballLeftRigthDetection();
@@ -133,7 +140,6 @@ requestAnimationFrame(function gameLoop() {
 
   requestAnimationFrame(gameLoop);
 });
-
 
 // //Increase speed on bounce
 // if(x > canvas.width - radius) {
