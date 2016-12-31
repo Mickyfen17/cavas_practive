@@ -117,17 +117,34 @@ function paddleHitDetection () {
   }
 }
 
-var rowHeight = brickHeight + padding; //15px + 1px => 1px
-var colWidth = brickWidth + padding; //79px + 1px => 80px
+var rowHeight = brickHeight + padding;           //15px + 1px => 1px
+var colWidth = brickWidth + padding;             //79px + 1px => 80px
 
 function brickHitDetection() {
-  var row = Math.floor(y/rowHeight); //y axis for position of ball / 16(rowHeight) => 0-17
-  var column = Math.floor(x/colWidth);  //x axis for posistion of ball / 80(colWidth) => 0-4
-  if(y < brickRows * rowHeight && row >= 0 && //ball posistion less than 3(brickRow) * 16(rowHeight) => 48px && row >= 0
+  var row = Math.floor(y/rowHeight);             //y axis for position of ball / 16(rowHeight) => 0-17
+  var column = Math.floor(x/colWidth);           //x axis for posistion of ball / 80(colWidth) => 0-4
+  if(y < brickRows * rowHeight && row >= 0 &&    //ball posistion less than 3(brickRow) * 16(rowHeight) => 48px && row >= 0
      column >= 0 && bricks[row][column] === 1) { //column >= 0 && the value at Array brick[row][column] === 1
-    speedY =- speedY;                             //rebound the ball
+    speedY =- speedY;                            //rebound the ball
+    bricks[row][column] = 0;                     //set brick value to 0 to vanish brick
+    scoreIncrease();
     // console.log(row, column);
-    bricks[row][column] = 0;                      //set brick value to 0 to vanish brick
+  }
+}
+
+function scoreIncrease() {
+  var score = document.getElementById("score");
+  score.innerText ++;
+  console.log(score.innerText);
+  speedIncrease(score.innerText);
+}
+
+function speedIncrease(score) {
+  if(score % 2 === 0) {
+    // speedX++;
+    speedY++;
+    speedX++;
+    console.log("speed inscrease", speedX, speedY);
   }
 }
 
