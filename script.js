@@ -7,13 +7,32 @@ var speedX = 3;  //positive moves L to R, negative moves R to L
 var speedY = 3;  //positive move T to B, negative moves B to T
 
 //DRAW BALL FUNCTION
-function circle(x, y, radius, color) {
-  context.beginPath();
-  context.arc(x, y, radius, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
-  context.closePath();
-  context.fillStyle = color;
-  context.fill();
+// function circle(x, y, radius, color) {
+//   context.beginPath();
+//   context.arc(x, y, radius, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
+//   context.closePath();
+//   context.fillStyle = color;
+//   context.fill();
+// }
+
+// BALL CONSTRUCTOR FUNCTION
+function Ball(x, y, radius, color) {
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+  this.color = color;
 }
+
+Ball.prototype.drawBall = function() {
+  context.beginPath();
+  context.arc(this.x, this.y, this.radius, 0, Math.PI*2); //x,y,radius/size,start pos,end pos
+  context.closePath();
+  context.fillStyle = this.color;
+  context.fill();
+};
+
+// var gameBall = new Ball(x, y, radius, "red");
+
 
 //RECTANGLE CONSTRUCTOR FUNCTION
 function Rectangle(x, y, width, height) {
@@ -21,8 +40,11 @@ function Rectangle(x, y, width, height) {
   this.y = y;
   this.width = width;
   this.height = height;
-  this.draw = function() {context.fillRect(this.x, this.y, this.width, this.height);};
 }
+
+Rectangle.prototype.draw = function() {
+  context.fillRect(this.x, this.y, this.width, this.height);
+};
 
 var paddle = new Rectangle(canvas.width/2, canvas.height - 15, 100, 10);
 
@@ -150,9 +172,10 @@ function speedIncrease(score) {
 
 // Main game animation
 requestAnimationFrame(function gameLoop() {
+  var gameBall = new Ball(x, y, radius, "red");
   context.clearRect(0, 0, canvas.width, canvas.height); //clear ball after movement
   paddle.draw(); //create paddle
-  circle(x, y, radius, "blue"); //create ball
+  gameBall.drawBall();
   drawBricks();
   paddleMovement();
   ballTopBottomDetection();
